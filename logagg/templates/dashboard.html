@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-3">
+
+  <!-- Фильтры -->
+  <div class="col-lg-3">
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h6>Фильтры</h6>
+        <div class="mb-2"><label class="form-label small">С даты</label>
+          <input id="dateFrom" type="datetime-local" class="form-control form-control-sm"></div>
+        <div class="mb-2"><label class="form-label small">По дату</label>
+          <input id="dateTo" type="datetime-local" class="form-control form-control-sm"></div>
+        <div class="mb-2"><label class="form-label small">IP</label>
+          <input id="ipFilter" type="text" class="form-control form-control-sm"></div>
+        <div class="mb-2"><label class="form-label small">Ключевое слово</label>
+          <input id="keyword" type="text" class="form-control form-control-sm" placeholder="url / user-agent / referrer"></div>
+        <div class="mb-2"><label class="form-label small">URL</label>
+          <select id="urlFilter" class="form-select form-select-sm">
+            <option value="">-- все URL --</option>
+          </select></div>
+        <div class="mb-2"><label class="form-label small">Файл лога</label>
+          <select id="fileFilter" class="form-select form-select-sm">
+            <option value="">-- все файлы --</option>
+          </select></div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="groupByIp">
+          <label class="form-check-label small">Группировать по IP</label>
+        </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="groupByDate">
+          <label class="form-check-label small">Группировать по дате</label>
+        </div>
+        <button class="btn btn-primary btn-sm w-100" onclick="fetchLogs()">Применить</button>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h6>Импорт логов</h6>
+        <button class="btn btn-success btn-sm w-100 mb-2" onclick="triggerImport()">Импортировать сейчас</button>
+        <div class="progress mb-1" style="height: 18px;">
+          <div id="progressBar" class="progress-bar" style="width:0%">0%</div>
+        </div>
+        <small id="progressInfo" class="text-muted">—</small>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6>Статистика</h6>
+        <div id="stats" class="small text-muted">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Таблица результатов -->
+  <div class="col-lg-9">
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h6>Записи логов <span id="totalInfo" class="text-muted small"></span></h6>
+        <div class="table-responsive" style="max-height: 65vh; overflow:auto">
+          <table class="table table-sm table-hover table-striped align-middle" id="logTable">
+            <thead class="table-light sticky-top">
+              <tr>
+                <th>Время</th><th>IP</th><th>Method</th><th>URL</th>
+                <th>Status</th><th>Size</th><th>UA</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6>Импортированные файлы (клик — посмотреть записи)</h6>
+        <ul id="filesList" class="list-group list-group-flush small"></ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}
